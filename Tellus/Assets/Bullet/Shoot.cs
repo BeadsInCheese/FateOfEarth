@@ -6,7 +6,8 @@ public class Shoot : MonoBehaviour
 {
     public PlayerInput input;
     Vector3 Direction;
-     
+    public GameObject p_bullet;
+    Bullet bullet;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +27,12 @@ public class Shoot : MonoBehaviour
          worldPosition = ray.GetPoint(distance);
     }
             Direction=worldPosition-input.transform.position;
+            bullet=Instantiate(p_bullet).GetComponent<Bullet>();
+
+            var dir=Direction.normalized;
+            dir=dir.normalized;
+            bullet.Dir=new Vector3(dir.x,0,dir.z);;
+            bullet.transform.position=transform.position+new Vector3(dir.x,0,dir.z);
             Debug.Log("shoot "+Direction);
         }
 

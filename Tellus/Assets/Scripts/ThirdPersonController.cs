@@ -81,6 +81,10 @@ namespace StarterAssets
 
         // player
         private float _speed;
+        public float _dashSpeed=5;
+        private float dashVelocity=1;
+        private bool dashing=false;
+        public float dashDrag=0.05f;
         private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
@@ -268,9 +272,19 @@ namespace StarterAssets
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
+            if(!dashing){
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-
+            }else{
+                            dashVelocity-=dashDrag*Time.deltaTime;
+                            if(dashVelocity<=2){
+                                dashing=false;
+                            }
+                            targetDirection=transform.forward;
+                            _controller.Move(_input.sprint?(dashVelocity)*4*targetDirection * (  Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime:(dashVelocity)*targetDirection*2 * (  Time.deltaTime) +
+                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
             // update animator if using character
             if (_hasAnimator)
             {
@@ -304,6 +318,8 @@ namespace StarterAssets
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+                    dashing=true;
+                    dashVelocity=_dashSpeed;
 
                     // update animator if using character
                     if (_hasAnimator)
