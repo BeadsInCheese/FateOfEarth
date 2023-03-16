@@ -24,16 +24,12 @@ public class AudioManager : MonoBehaviour
         music=GetComponent<AudioSource>();
     }
     public void playSoundAtPoint(AudioClip audio,Vector3 pos){
-        float volume;
-               Sounds.transform.position=pos;
-        audioMixer.GetFloat("Sounds",out volume);
-        Debug.Log(volume);
-        Sounds.PlayOneShot(audio,Mathf.Pow(10, (volume/20)));
+        Sounds.transform.position=pos;
+        Sounds.PlayOneShot(audio);
     }
     public void playDialogueAtPoint(AudioClip audio,Vector3 pos){
-        Dialogue.transform.position=pos;
-        Dialogue.clip=audio;
-        Dialogue.Play();
+      Dialogue.transform.position=pos;
+        Dialogue.PlayOneShot(audio);
     }
     public void changeMusic(string key){
         music.clip=SoundTrack[key];
