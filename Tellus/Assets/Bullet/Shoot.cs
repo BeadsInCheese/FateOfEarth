@@ -8,6 +8,10 @@ public class Shoot : MonoBehaviour
     Vector3 Direction;
     public GameObject p_bullet;
     Bullet bullet;
+    public GameObject gun;
+    public AudioClip shotGunSound;
+    public GameObject HandL;
+    public GameObject HandR;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,17 +24,24 @@ public class Shoot : MonoBehaviour
     void Update()
     {
         float distance;
-        if(input.actions["Shoot"].triggered){
-            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Mouse.current.position.x.ReadValue(),Mouse.current.position.y.ReadValue(),Camera.main.nearClipPlane));
-                if (plane.Raycast(ray, out distance))
-    {
-         worldPosition = ray.GetPoint(distance);
-    }
-            Direction=worldPosition-input.transform.position;
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), Camera.main.nearClipPlane));
+        if (plane.Raycast(ray, out distance))
+        {
+            worldPosition = ray.GetPoint(distance);
+        }
+        Direction = worldPosition - input.transform.position;
+        var dir = Direction.normalized;
+        dir = dir.normalized;
+        gun.transform.LookAt(transform.position - 5 *new Vector3(dir.x, 0, dir.z)); ;
+        gun.transform.position = transform.position + new Vector3(dir.x, 1, dir.z);
+        HandL.transform.position= transform.position + new Vector3(dir.x, 1, dir.z);
+        HandR.transform.position = transform.position + new Vector3(dir.x, 1, dir.z);
+        if (input.actions["Shoot"].triggered){
+
+            AudioManager.instance.playSoundAtPoint(shotGunSound,gun.transform.position);
             bullet=Instantiate(p_bullet).GetComponent<Bullet>();
 
-            var dir=Direction.normalized;
-            dir=dir.normalized;
+
             bullet.Dir=new Vector3(dir.x,0,dir.z);;
             bullet.transform.position=transform.position+new Vector3(dir.x,0,dir.z);
             Debug.Log("shoot "+Direction);

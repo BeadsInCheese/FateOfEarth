@@ -4858,7 +4858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dir: {x: 0, y: 0, z: 0}
-  speed: 5
+  speed: 50
 --- !u!96 &5491050782484781151
 TrailRenderer:
   serializedVersion: 2

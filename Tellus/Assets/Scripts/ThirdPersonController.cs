@@ -113,7 +113,15 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("Bullet collision");
+            if (collision.gameObject.tag.Equals("Enemy"))
+            {
 
+
+            }
+        }
         private bool IsCurrentDeviceMouse
         {
             get
