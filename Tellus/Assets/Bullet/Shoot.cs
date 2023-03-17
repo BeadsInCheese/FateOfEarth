@@ -10,14 +10,28 @@ public class Shoot : MonoBehaviour
     Bullet bullet;
     public GameObject gun;
     public AudioClip shotGunSound;
+    public AudioClip ReloadSound;
     public GameObject HandL;
     public GameObject HandR;
+    private int MaxClip = 2;
+    private int clip = 2;
+    private int ammo = 2;
+    private int MaxAmmo = 50;
     // Start is called before the first frame update
     void Start()
     {
         
     }
+    IEnumerator Reload()
+    {
 
+        yield return new WaitForSeconds(0.5f);
+        AudioManager.instance.playSoundAtPoint(ReloadSound, gun.transform.position);
+        yield return new WaitForSeconds(0.1f);
+        int amount = ammo - (ammo - (MaxClip-clip));
+        ammo -= amount;
+        clip = amount+clip;
+    }
     // Update is called once per frame
     Plane plane = new Plane(Vector3.up, 0);
     Vector3 worldPosition;
@@ -33,18 +47,24 @@ public class Shoot : MonoBehaviour
         var dir = Direction.normalized;
         dir = dir.normalized;
         gun.transform.LookAt(transform.position - 5 *new Vector3(dir.x, 0, dir.z)); ;
-        gun.transform.position = transform.position + new Vector3(dir.x, 1, dir.z);
-        HandL.transform.position= transform.position + new Vector3(dir.x, 1, dir.z);
-        HandR.transform.position = transform.position + new Vector3(dir.x, 1, dir.z);
-        if (input.actions["Shoot"].triggered){
-
+        gun.transform.position = transform.position + new Vector3(dir.x, 2, dir.z)*0.6f;
+        HandL.transform.position= transform.position + (new Vector3(dir.x, 1, dir.z)*0.6f);
+        HandR.transform.position = transform.position + (new Vector3(dir.x, 1, dir.z) * 0.6f);
+        if (input.actions["Shoot"].triggered && clip>0){
+            clip--;
+            if (clip <= 0)
+            {
+                StartCoroutine("Reload");
+            }
             AudioManager.instance.playSoundAtPoint(shotGunSound,gun.transform.position);
             bullet=Instantiate(p_bullet).GetComponent<Bullet>();
 
 
-            bullet.Dir=new Vector3(dir.x,0,dir.z);;
-            bullet.transform.position=transform.position+new Vector3(dir.x,0,dir.z);
-            Debug.Log("shoot "+Direction);
+            bullet.Dir=new Vector3(dir.x,0,dir.z);
+            var bulletpos= transform.position + new Vector3(dir.x, 0, dir.z).normalized;
+            bulletpos.y = gun.transform.position.y;
+            bullet.transform.position = bulletpos;
+            //Debug.Log("shoot "+Direction);
         }
 
     }

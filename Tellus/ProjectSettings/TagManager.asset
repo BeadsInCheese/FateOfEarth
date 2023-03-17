@@ -12,12 +12,12 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - EnemyBullets
+  - PlayerBullets
   - Character
   - Ground
-  - 
-  - 
+  - Enemies
+  - Enviroment
   - 
   - 
   - 
