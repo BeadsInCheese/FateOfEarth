@@ -13,6 +13,7 @@ public class Shoot : MonoBehaviour
     public AudioClip ReloadSound;
     public GameObject HandL;
     public GameObject HandR;
+    public Transform body;
     private int MaxClip = 2;
     private int clip = 2;
     private int ammo = 2;
@@ -37,6 +38,7 @@ public class Shoot : MonoBehaviour
     Vector3 worldPosition;
     void Update()
     {
+
         float distance;
         Ray ray = Camera.main.ScreenPointToRay(new Vector3(Mouse.current.position.x.ReadValue(), Mouse.current.position.y.ReadValue(), Camera.main.nearClipPlane));
         if (plane.Raycast(ray, out distance))
@@ -46,10 +48,15 @@ public class Shoot : MonoBehaviour
         Direction = worldPosition - input.transform.position;
         var dir = Direction.normalized;
         dir = dir.normalized;
-        gun.transform.LookAt(transform.position - 5 *new Vector3(dir.x, 0, dir.z)); ;
+        var target= transform.position - 5 * new Vector3(dir.x, 0, dir.z);
+        gun.transform.LookAt(target); ;
         gun.transform.position = transform.position + new Vector3(dir.x, 2, dir.z)*0.6f;
-        HandL.transform.position= transform.position + (new Vector3(dir.x, 1, dir.z)*0.6f);
-        HandR.transform.position = transform.position + (new Vector3(dir.x, 1, dir.z) * 0.6f);
+
+        HandL.transform.position= gun.transform.position;
+        HandR.transform.position = gun.transform.position;
+
+        //hand.Rotate(new Vector3(0,0,1));
+        //hand2.Rotate(new Vector3(0, 0, 1));
         if (input.actions["Shoot"].triggered && clip>0){
             clip--;
             if (clip <= 0)
