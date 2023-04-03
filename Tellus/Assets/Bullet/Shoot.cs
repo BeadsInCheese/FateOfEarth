@@ -21,7 +21,15 @@ public class Shoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ammo = MaxAmmo;
+    }
+    public int getClip()
+    {
+        return clip;
+    }
+    public int getAmmo()
+    {
+        return ammo;
     }
     IEnumerator Reload()
     {

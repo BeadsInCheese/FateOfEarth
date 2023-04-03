@@ -11,12 +11,15 @@ public class AudioManager : MonoBehaviour
         public AudioSource Sounds;
             public AudioSource Dialogue;
     public static AudioManager instance;
+
+    [SerializeField]
     public Dictionary<string,AudioClip> SoundTrack;
     void Awake(){
         if(instance!=null){
             Destroy(this.gameObject);
         }else{
             instance=this;
+            DontDestroyOnLoad(this.gameObject);
         }
     }
     void Start()
@@ -31,11 +34,9 @@ public class AudioManager : MonoBehaviour
       Dialogue.transform.position=pos;
         Dialogue.PlayOneShot(audio);
     }
-    public void changeMusic(string key){
-        music.clip=SoundTrack[key];
-        float tempvolume;
-        audioMixer.GetFloat("Music",out tempvolume);
-        music.volume=tempvolume;
+    public void changeMusic(AudioClip audio)
+    {
+        music.clip=audio;
         music.Play();
         music.loop=true;
     }

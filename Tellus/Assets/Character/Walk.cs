@@ -48,7 +48,7 @@ public class Walk : MonoBehaviour
             {
                 direction += 2 * Mathf.PI;
             }
-            Debug.Log(direction);
+            //Debug.Log(direction);
             movementDelta = this.body.transform.position;
             //test
             //transform.position += new Vector3(Mathf.Cos(direction), 0f, Mathf.Sin(direction)) * speed * Time.deltaTime;

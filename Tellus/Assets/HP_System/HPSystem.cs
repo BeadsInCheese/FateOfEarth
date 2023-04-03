@@ -11,6 +11,10 @@ public class HPSystem : MonoBehaviour
     {
         hp=maxHp;
     }
+    public int getHP()
+    {
+        return hp;
+    }
     public bool takeDamage(int amount){
         hp-=amount;
         if(hp<0){return false;}
