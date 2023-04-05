@@ -16,7 +16,7 @@ public class RoombaBehaviour : MonoBehaviour
     public GameObject player;
     public Sprite mad;
     public Image image;
-    float treshold = 0.2f;
+    float treshold = 0.5f;
     Rigidbody rb;
     public BTTree.Status selectRandomTarget() {
         image.sprite = happy;
@@ -31,7 +31,13 @@ public class RoombaBehaviour : MonoBehaviour
         }
         else { return Node.Status.SUCCESS; }
     }
-
+    public BTTree.Status CloseToPlayer(){
+        if((PlayerAccess.Instance.transform.position-this.transform.position).magnitude<5){
+            return Node.Status.SUCCESS;
+        }else{
+            return Node.Status.FAILURE;
+        }
+    }
     public BTTree.Status moveToTarget()
     {
         if ((this.transform.position - target).magnitude < treshold)
@@ -45,6 +51,12 @@ public class RoombaBehaviour : MonoBehaviour
 
         }
     }
+    public BTTree.Status Attack()
+    {
+        target=PlayerAccess.Instance.transform.position;
+        image.sprite = mad;
+        return Node.Status.SUCCESS;
+    }
         void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,10 +65,17 @@ public class RoombaBehaviour : MonoBehaviour
         SequenceNode LowHealth = new SequenceNode("LowHealth");
         SequenceNode Seek = new SequenceNode("Player Close");
         SequenceNode Wonder = new SequenceNode("Wonder");
+        SequenceNode ATK=new SequenceNode("ATK");
         LeafNode selecrandom=new LeafNode("wonder",selectRandomTarget);
+        LeafNode Close=new LeafNode("Close",CloseToPlayer);
+        LeafNode attack=new LeafNode("Attack",Attack);
         LeafNode movToTarget = new LeafNode("",moveToTarget);
 
         root.AddChild(mode);
+        ATK.AddChild(Close);
+        ATK.AddChild(attack);
+        ATK.AddChild(movToTarget);
+        mode.AddChild(ATK);
         mode.AddChild(Wonder);
         Wonder.AddChild(selecrandom);
         Wonder.AddChild(movToTarget);
